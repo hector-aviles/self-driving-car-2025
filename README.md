@@ -8,13 +8,13 @@
 
 Note: It is assumed that Ubuntu OS, ROS platform and Webots simulator are already installed. 
 
-* $ cd
-* $ git clone https://github.com/hector-aviles/self-driving-car-2025
-* $ cd self-driving-car-2025/catkin_ws
-* $ catkin_make
 * $ sudo pip3 install beepy
 * $ sudo apt install ros-noetic-webots-ros
 * $ sudo apt install ros-noetic-ros-numpy
+* $ cd ~
+* $ git clone https://github.com/hector-aviles/self-driving-car-2025
+* $ cd self-driving-car-2025/catkin_ws
+* $ catkin_make
 * $ echo "source ~/self-driving-car-2025/catkin_ws/devel/setup.bash" >> ~/.bashrc
 * $ source ~/.bashrc
 
