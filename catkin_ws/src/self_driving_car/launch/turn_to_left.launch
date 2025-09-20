@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="max_speed" default="20"/>
+  <arg name="k_following" default="10"/>
+  <arg name="dist_to_car" default="20"/>  
+  <arg name="goal_dist" default="200"/>    
+  
+  <env name="WEBOTS_HOME" value="/usr/local/webots"/>
+  <arg name="no_gui" default="false," doc="Start Webots with minimal GUI"/>
+
+  <include file="$(find webots_ros)/launch/webots.launch">
+    <arg name="mode" value="realtime"/>
+    <arg name="no_gui" value="$(arg no_gui)"/>
+    <arg name="world" value="$(find self_driving_car)/worlds/turn_to_left.wbt"/>
+  </include>
+  
+  <node name="lane_detector" pkg="self_driving_car" type="lane_detector_canny_hough.py" output="screen"/>
+  <node name="obstacle_detector" pkg="self_driving_car" type="obstacle_detector.py" output="screen"/>
+  <node name="behaviors" pkg="self_driving_car" type="behaviors.py" output="screen">
+      <param name="max_speed" value="$(arg max_speed)"/>
+      <param name="k_following" value="$(arg k_following)"/>
+      <param name="dist_to_car" value="$(arg dist_to_car)"/>
+  </node>
+  
+  <node name="success" pkg="self_driving_car" type="success.py" output="screen"/>
+  <node name="stop" pkg="self_driving_car" type="stop.py" output="screen"/>
+  <node name="lane_identification" pkg="self_driving_car" type="lane_identification.py" output="screen"/>
+  <node pkg="tf" type="static_transform_publisher" name="car_to_lidar"  args="  0 0 2.0 0 0 0 car_link lidar_link 30"/>
+  <node pkg="tf" type="static_transform_publisher" name="car_to_camera" args="1.2 0 1.5 0 0 0 car_link camera_link 30"/>
+  <node pkg="tf" type="static_transform_publisher" name="car_to_gyro"   args="  0 0 0.1 0 0 0 car_link gyro_link 30"/>
+  <node pkg="tf" type="static_transform_publisher" name="car_to_accelerometer"   args="  0 0 0.1 0 0 0 car_link accel_link 30"/>  
+  <node pkg="tf" type="static_transform_publisher" name="car_to_gps"    args="  0 0 0.1 0 0 0 car_link gps_link 10"/>
+
+</launch>
