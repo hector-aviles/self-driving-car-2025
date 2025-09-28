@@ -13,7 +13,7 @@ rosrun utils logger.py
 
 7) En la tercera pestaña, para ejecutar la política:
 
-rosrun airj2024 policy.py 0 0
+rosrun self_driving_car policy.py 0 0
 
 8) Repetir 50 veces para el mundo 00 y volver al paso 1. està vez para el mundo 01, 02, 03,..., 10, 11,..., 15 (haciendo el paràmetro world:=01, world:=02, etc.)
 

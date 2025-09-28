@@ -1,0 +1,138 @@
+https://github.com/hector-aviles/AIRJ2025
+
+PL-fMDPs
+CART
+XGBoost
+LR
+                 
+1) Descargar repositorio: 
+
+$ git clone https://github.com/hector-aviles/self-driving-car-2025
+
+2) Entrar al subdirectorio self-driving-car-2025/catkin_ws y hacer:
+
+$ catkin_make
+
+3) Ejecutar los siguientes pasos:
+
+Abrir 3 terminales dentro del subdirectorio self-driving-car-2025/catkin_ws y en cada terminal hacer:
+
+$ source devel/setup.bash
+  
+En cada terminal ejecutar las siguientes instrucciones haciendo 30 corridas:  
+ 
+# 3 mundos conocidos y 3 mundos desconocidos 
+
+######################   
+# Clasificador CART, 6 mundos:
+######################
+
+$ roslaunch self_driving_car world_04.launch 
+$ rosrun utils logger.py 
+$ rosrun self_driving_car test_CART.py 3 4
+ 
+$ roslaunch self_driving_car world_07.launch  
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_CART.py 3 4
+
+$ roslaunch self_driving_car world_15.launch 
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_CART.py 3 4
+
+$ roslaunch self_driving_car two_ways.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_CART.py -7 7
+
+$ roslaunch self_driving_car transverse_direction.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_CART.py -7 7
+
+$ roslaunch self_driving_car turn_right.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_CART.py 9 7
+
+######################   
+# Clasificador LR, 6 mundos:
+######################
+
+$ roslaunch self_driving_car world_04.launch 
+$ rosrun utils logger.py 
+$ rosrun self_driving_car test_LR.py 3 4
+ 
+$ roslaunch self_driving_car world_07.launch  
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_LR.py 3 4
+
+$ roslaunch self_driving_car world_15.launch 
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_LR.py 3 4
+
+$ roslaunch self_driving_car two_ways.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_LR.py -7 7
+
+$ roslaunch self_driving_car transverse_direction.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_LR.py -7 7
+
+$ roslaunch self_driving_car turn_right.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_LR.py 9 7
+
+######################   
+# Clasificador XGBoost, 6 mundos:
+######################
+
+$ roslaunch self_driving_car world_04.launch 
+$ rosrun utils logger.py 
+$ rosrun self_driving_car test_XGBoost.py 3 4
+ 
+$ roslaunch self_driving_car world_07.launch  
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_XGBoost.py 3 4
+
+$ roslaunch self_driving_car world_15.launch 
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_XGBoost.py 3 4
+
+$ roslaunch self_driving_car two_ways.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_XGBoost.py -7 7
+
+$ roslaunch self_driving_car transverse_direction.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_XGBoost.py -7 7
+
+$ roslaunch self_driving_car turn_right.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_XGBoost.py 9 7
+
+######################   
+# Clasificador AP, 6 mundos:
+######################
+
+$ roslaunch self_driving_car world_04.launch 
+$ rosrun utils logger.py 
+$ rosrun self_driving_car test_AP.py 3 4
+ 
+$ roslaunch self_driving_car world_07.launch  
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_AP.py 3 4
+
+$ roslaunch self_driving_car world_15.launch 
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_AP.py 3 4
+
+$ roslaunch self_driving_car two_ways.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_AP.py -7 7
+
+$ roslaunch self_driving_car transverse_direction.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_AP.py -7 7
+
+$ roslaunch self_driving_car turn_right.launch
+$ rosrun utils logger.py
+$ rosrun self_driving_car test_AP.py 9 7
+
+

@@ -15,6 +15,8 @@ import pickle
 import time
 import numpy as np
 import os
+from sklearn.preprocessing import LabelEncoder
+
 
 def callback_free_N(msg):
     global free_N
@@ -87,17 +89,17 @@ def change_lane_on_right():
     pub_change_lane_on_right.publish(True)    
             
 def main(speed_left, speed_right):
-    global free_NW, free_W, free_SW, free_NE, free_E, free_SE,  curr_lane, change_lane_finished
+    global free_N, free_NW, free_W, free_SW, free_NE, free_E, free_SE,  curr_lane, change_lane_finished
     global pub_keep_distance, pub_cruise, pub_change_lane_on_left, pub_change_lane_on_right, pub_action
     
     vel_cars_left_lane = int(speed_left)
     vel_cars_right_lane = int(speed_right)    
     
     print("INITIALIZING POLICY...", flush=True)
-    rospy.init_node("test_MLP")
+    rospy.init_node("test_CART")
     rate = rospy.Rate(10) #Hz
-       
-    rospy.Subscriber("/free/north", Bool, callback_free_N)              
+
+    rospy.Subscriber("/free/north", Bool, callback_free_N)       
     rospy.Subscriber("/free/north_west", Bool, callback_free_NW)
     rospy.Subscriber("/free/west"      , Bool, callback_free_W)
     rospy.Subscriber("/free/south_west", Bool, callback_free_SW)
@@ -105,7 +107,7 @@ def main(speed_left, speed_right):
     rospy.Subscriber("/free/east"      , Bool, callback_free_E)    
     rospy.Subscriber("/free/south_east"      , Bool, callback_free_SE)
     rospy.Subscriber("/current_lane", Bool, callback_curr_lane)
-       
+   
     pub_policy_started  = rospy.Publisher("/policy_started", Empty, queue_size=1)
     pub_cruise = rospy.Publisher("/cruise/enable", Bool, queue_size=1)
     pub_keep_distance    = rospy.Publisher("/follow/enable", Bool, queue_size=1)
@@ -114,7 +116,8 @@ def main(speed_left, speed_right):
     pub_action = rospy.Publisher("/action", String, queue_size=1)
     
     pub_speed_cars_left_lane = rospy.Publisher("/speed_cars_left_lane", Float64, queue_size=1)
-    pub_speed_cars_right_lane = rospy.Publisher("/speed_cars_right_lane", Float64, queue_size=1)       
+    pub_speed_cars_right_lane = rospy.Publisher("/speed_cars_right_lane", Float64, queue_size=1)    
+    
 
     free_NW = True
     free_W  = True
@@ -131,6 +134,10 @@ def main(speed_left, speed_right):
        model = pickle.load(open(file, 'rb'))  
     except Exception as error:
        print("Error loading model:", error)        
+
+    # Create and configure the label encoder for decoding
+    encoder = LabelEncoder()
+    encoder.classes_ = np.array(['change_to_left', 'change_to_right', 'cruise', 'keep'])
 
     # Pause policy.py a little bit
     rate = rospy.Rate(1) #Hz
@@ -155,7 +162,7 @@ def main(speed_left, speed_right):
              free_NE = free_N
            else: 
              free_NW = free_N   
-
+        
            X = pd.DataFrame(columns=["curr_lane", "free_E", "free_NE", "free_NW", "free_SE", "free_SW", "free_W"])
 
            row_val = {
@@ -175,47 +182,48 @@ def main(speed_left, speed_right):
                
         try:
            start_time = time.time()
-           y = model.predict(X)
-           action = y[0]
+           # Get numerical prediction from model
+           y_numeric = model.predict(X)
+           # Decode numerical prediction to string label
+           action_encoded = y_numeric[0]
+           action = encoder.inverse_transform([action_encoded])[0]
            end_time = time.time()
            testing_time = end_time - start_time
            print("Prediction time:", testing_time, flush = True)           
         except Exception as error:
            print("An error occurred getting prediction:", error)
            
-        print(action, flush = True)
+        print(f"Action (decoded): {action}", flush = True)
         action_prev = action
         print("curr_lane", curr_lane, "free_NE", free_NE, "free_NW", free_NW, "free_SW", free_SW, "free_W", free_W, "free_SE", free_SE, "free_E", free_E,  flush = True)
-                
-        if action == "Cruise":
-           pub_action.publish("Cruise")
+    
+        if action == "cruise":
+           pub_action.publish("cruise")
            cruise()                
-        elif action == "Keep":
-           pub_action.publish("Keep distance")
+        elif action == "keep":
+           pub_action.publish("keep")
            keep_distance()        
-        elif action == "Change_to_left":
-           pub_action.publish("Change_to_left")
+        elif action == "change_to_left":
+           pub_action.publish("change_to_left")
            change_lane_on_left()
            print ("Waiting for change lane to finish...", flush = True, end="")
            rospy.wait_for_message("/change_lane_finished", Bool, timeout=10000.0)
            print (" End", flush = True)           
-        elif action == "Change_to_right":
-           pub_action.publish("Change_to_right")
+        elif action == "change_to_right":
+           pub_action.publish("change_to_right")
            change_lane_on_right()                
            print ("Waiting for change lane to finish...", flush = True, end="")
            rospy.wait_for_message("/change_lane_finished", Bool, timeout=10000.0)
            print (" End", flush = True)
-        
-        print(action, flush = True)
-        action_prev = action
-        print("curr_lane", curr_lane, "free_NE", free_NE, "free_NW", free_NW, "free_SW", free_SW, "free_W", free_W, "free_SE", free_SE, "free_E", free_E,  flush = True)
-                                              
+        else:
+           print(f"Unknown action: {action}", flush = True)
+                                                      
         rate.sleep()
 
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
-       print("Usage: rosrun self_driving_car test_MLP.py speed_left speed_right (m/s)", len(sys.argv))
+       print("Usage: rosrun self_driving_car test_CART.py speed_left speed_right (m/s)", len(sys.argv))
     else:   
        try:
           speed_left = sys.argv[1]
@@ -224,6 +232,3 @@ if __name__ == "__main__":
        except:
           rospy.ROSInterruptException
        pass
-
-    
-

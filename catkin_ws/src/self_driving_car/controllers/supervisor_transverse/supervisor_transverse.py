@@ -29,6 +29,7 @@ def main():
     speed_cars_left_lane = 0.0
     speed_cars_right_lane = 0.0
     
+    lateral_car = robot.getFromDef('lateral_car')
     cars = [robot.getFromDef('vehicle_1'), robot.getFromDef('vehicle_2'),
 robot.getFromDef('vehicle_3'), robot.getFromDef('vehicle_4'),  robot.getFromDef('vehicle_5'), robot.getFromDef('vehicle_6'), robot.getFromDef('vehicle_7'), robot.getFromDef('vehicle_8'), robot.getFromDef('vehicle_9'), robot.getFromDef('vehicle_10')]
 
@@ -49,6 +50,28 @@ robot.getFromDef('vehicle_3'), robot.getFromDef('vehicle_4'),  robot.getFromDef(
 
     bmw  = robot.getFromDef('BMW_X5')  
 
+    if lateral_car is not None:
+        lateral_tf = lateral_car.getField("translation")
+        lateral_values = lateral_tf.getSFVec3f()
+        
+        random_x = np.random.uniform(-25, -20)  #rango deseado para y
+        lateral_values[1] = random_x
+        
+        # Actualizar la posición
+        lateral_tf.setSFVec3f(lateral_values)
+        lateral_car.resetPhysics()
+        
+    if bmw is not None:
+        bmw_tf = bmw.getField("translation")
+        bmw_values = bmw_tf.getSFVec3f()
+        
+        random_x = np.random.uniform(35, 45)  #rango deseado para X
+        bmw_values[0] = random_x
+        
+        # Actualizar la posición
+        bmw_tf.setSFVec3f(bmw_values)
+        bmw.resetPhysics()
+
     #linear_velocity_North = cars[0].getField("translation")
     start = False
     rospy.init_node("supervisor_node")
@@ -68,16 +91,19 @@ robot.getFromDef('vehicle_3'), robot.getFromDef('vehicle_4'),  robot.getFromDef(
     pub_car_8_pose  = rospy.Publisher("/car_8_pose", Pose2D, queue_size=1)
     pub_car_9_pose  = rospy.Publisher("/car_9_pose", Pose2D, queue_size=1)
     pub_car_10_pose  = rospy.Publisher("/car_10_pose", Pose2D, queue_size=1)
-
+    pub_lateral_car_pose  = rospy.Publisher("/lateral_car_pose", Pose2D, queue_size=1)
+    
     msg_bmw_pose = Pose2D()
     msg_car_pose = Pose2D()
+    msg_lateral_car_pose = Pose2D()
     
     print("Supervisor.->Waiting for start signal")
     rospy.wait_for_message("/policy_started", Empty, timeout=50000.0)
     print("Supervisor.->Start signal received")    
         
     while robot.step(TIME_STEP) != -1 and not rospy.is_shutdown():
-
+        
+        lateral_car.setVelocity([0, 5, 0, 0, 0, 0])
         i = 0 
         for car in cars:
             if car is not None:        
@@ -88,10 +114,10 @@ robot.getFromDef('vehicle_3'), robot.getFromDef('vehicle_4'),  robot.getFromDef(
                            
                if msg_car_pose.y > 0:            
                   car.setVelocity([speed_cars_left_lane,0,0, 0,0,0])
-                  print("Car 1 speed:", speed_cars_left_lane, flush = True)
                else:    
                   car.setVelocity([speed_cars_right_lane,0,0, 0,0,0])
-                  print("Car 2 speed:", speed_cars_right_lane, flush = True)
+                  
+               
                            
                if i == 0:
                   pub_car_1_pose.publish(msg_car_pose)  
@@ -123,6 +149,7 @@ robot.getFromDef('vehicle_3'), robot.getFromDef('vehicle_4'),  robot.getFromDef(
         #print("x:", msg_bmw_pose.x, "y:", msg_bmw_pose.y, "theta:", msg_bmw_pose.theta, flush = True)
         
         pub_bmw_pose.publish(msg_bmw_pose)
+        pub_lateral_car_pose.publish(msg_lateral_car_pose)
                           
         loop.sleep()
   

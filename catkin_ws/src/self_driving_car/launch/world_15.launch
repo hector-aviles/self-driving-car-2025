@@ -11,7 +11,7 @@
   <include file="$(find webots_ros)/launch/webots.launch">
     <arg name="mode" value="realtime"/>
     <arg name="no_gui" value="$(arg no_gui)"/>
-    <arg name="world" value="$(find self_driving_car)/worlds/two_ways.wbt"/>
+    <arg name="world" value="$(find self_driving_car)/worlds/world_15.wbt"/>
   </include>
   
   <node name="lane_detector" pkg="self_driving_car" type="lane_detector_canny_hough.py" output="screen"/>
@@ -32,10 +32,10 @@
       <param name="goal_dist" value="$(arg goal_dist)"/>
   </node>    
   <node pkg="tf" type="static_transform_publisher" name="car_to_accelerometer"   args="  0 0 0.1 0 0 0 car_link accel_link 30"/>  
-  <node pkg="tf" type="static_transform_publisher" name="car_to_gps"    args="  0 0 0.1 0 0 0 car_link gps_link 10"/>
+  <node pkg="tf" type="static_transform_publisher" name="car_to_gps"  args="  0 0 0.1 0 0 0 car_link gps_link 10"/>
 
   <!-- <node name="policy" pkg="self_driving_car" type="policy.py" output="screen">
-     <param name="left_cars_speed" value="-5"/> 
+     <param name="left_cars_speed" value="5"/> 
      <param name="right_cars_speed" value="4"/>
    </node> -->
 </launch>

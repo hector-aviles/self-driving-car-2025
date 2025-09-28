@@ -489,7 +489,7 @@ def main():
 if __name__ == "__main__":
 
     # if len(sys.argv) != 3:
-    #     print("Usage: rosrun airj2024 policy.py speed_left speed_right (m/s)", len(sys.argv))
+    #     print("Usage: rosrun self_driving_car policy.py speed_left speed_right (m/s)", len(sys.argv))
     # else:     
     try:
         main()

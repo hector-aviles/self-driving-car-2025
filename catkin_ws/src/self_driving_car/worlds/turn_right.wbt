@@ -66,9 +66,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  fieldOfView 0.7
-  orientation -0.24007701177730112 -0.16692318225084168 0.956294766085925 3.9881456857686572
-  position 115.13180887056889 64.34623668316294 51.05757749991739
+  orientation -0.2883066217114107 -0.15883322601737254 0.9442728939190554 3.7539811311634486
+  position 108.5201786275171 40.130917704479636 47.95505090144659
   near 1
   follow "vehicle"
   lensFlare LensFlare {
@@ -91,7 +90,7 @@ SpeedLimitPanel {
   ]
 }
 StraightRoadSegment {
-  translation 120 0 0
+  translation 120 0 0.1
   name "segment_2"
   length 200
   roadBoundingObject TRUE
@@ -99,8 +98,31 @@ StraightRoadSegment {
   leftBorderBoundingObject TRUE
 }
 DEF BMW_X5 BmwX5 {
-  translation 20 -1.81 0.279016
-  rotation -1.1889576741483064e-14 -1 2.2651330356464375e-12 0.004494610325100353
+  hidden position_0_0 8.381964954305438e-11
+  hidden position2_0_0 2.1114083467938675e-05
+  hidden position_0_1 -8.381976396788818e-11
+  hidden position2_0_1 2.1114083461256703e-05
+  hidden position_0_2 -0.00816972237852933
+  hidden position_0_3 -0.008169722378450246
+  hidden position_0_9 6.243682189898993e-08
+  hidden linearVelocity_0 -2.8676089264974894e-06 -9.522432137768774e-15 -9.459588156314568e-06
+  hidden angularVelocity_0 -6.313182354224401e-15 -1.0981457209410806e-05 2.067065466782634e-15
+  hidden rotation_1 -0.9999999999921202 4.1909824771196953e-11 -3.96984551408819e-06 2.1114077824585282e-05
+  hidden linearVelocity_1 -2.203401301898576e-06 9.337134486361721e-14 2.2338308270668315e-07
+  hidden angularVelocity_1 3.8575707244034995e-12 -9.869068101906836e-06 -1.0796401155959477e-13
+  hidden rotation_2 0.9999999999921203 4.190988198361385e-11 3.969850934705212e-06 2.1114077824585282e-05
+  hidden linearVelocity_2 -2.203401300496884e-06 -8.405538528506307e-14 2.2338308233028998e-07
+  hidden angularVelocity_2 -3.8725045998941905e-12 -9.869068101090906e-06 1.135457380667935e-13
+  hidden rotation_3 1 0 0 0.008169722378551666
+  hidden linearVelocity_3 -2.4274460403900976e-06 3.6847906892166116e-13 -5.78972164115991e-07
+  hidden angularVelocity_3 1.637349392099376e-11 -6.442503160911108e-06 4.4582434950362973e-14
+  hidden rotation_4 -1 0 0 0.00816972237844295
+  hidden linearVelocity_4 -2.4274460369570553e-06 -3.5746240641582093e-13 -5.789721642675734e-07
+  hidden angularVelocity_4 -1.6387642128039025e-11 -6.442503151798663e-06 -4.360427213795264e-14
+  hidden translation_23 -2.132737364490822e-08 1.237812541354799e-07 -2.3938888427110783e-08
+  hidden rotation_23 0.7466598432279096 0 -0.6652060421485012 5.960464477539063e-08
+  translation 66.4371394188027 1.7699999999999998 0.41693684354914307
+  rotation -1.1594871425636762e-13 -0.9999999999999999 2.34965279832965e-12 0.0044871167397137245
   color 0.643137 0 0
   controller "bmw_x5_controller"
   sensorsSlotTop [
@@ -122,9 +144,9 @@ DEF BMW_X5 BmwX5 {
   ]
 }
 StraightRoadSegment {
-  translation 74.5 0 0
+  translation 10 0 0.1
   name "segment_1"
-  length 45.5
+  length 110
   roadBoundingObject TRUE
   rightBorderBoundingObject TRUE
   leftBorderBoundingObject TRUE
@@ -193,39 +215,15 @@ HighwayPole {
     }
   ]
 }
-DEF lateral_car LincolnMKZSimple {
-  translation 64.2623 -36.3994 0.279
-  rotation 0 0 1 1.57
-  name "lateral_car"
+DEF vehicle_1 CitroenCZeroSimple {
+  translation 50 -1.28 0.45
+  name "3"
+}
+DEF vehicle_2 TeslaModel3Simple {
+  translation 35 -1.65 0.4
+  name "4"
 }
 Robot {
-  controller "supervisor_transverse"
+  controller "supervisor"
   supervisor TRUE
-}
-StraightRoadSegment {
-  translation 66 8.5 0
-  rotation 0 0 1 1.57
-  numberOfForwardLanes 3
-  length 40
-  roadBoundingObject TRUE
-}
-StraightRoadSegment {
-  translation 66 -48.5 0
-  rotation 0 0 1 1.57
-  name "road(1)"
-  length 40
-  roadBoundingObject TRUE
-}
-RoadIntersection {
-  translation 66 0 0
-  rotation 0 0 1 0.785
-  boundingObject TRUE
-}
-StraightRoadSegment {
-  translation 10 0 0
-  name "road(2)"
-  length 47.5
-  roadBoundingObject TRUE
-  rightBorderBoundingObject TRUE
-  leftBorderBoundingObject TRUE
 }
